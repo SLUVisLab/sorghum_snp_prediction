@@ -1,5 +1,6 @@
 # SG×P : A Sorghum Genotype × Phenotype Prediction Dataset and Benchmark
-  A multimodal dataset and set of benchmarks focused on the discovery of genotype x phenotype relationships in bioenergy sorghum.
+  https://sorghumsnpbenchmark.com/  
+  A multimodal dataset and set of benchmarks focused on the discovery of genotype x phenotype relationships in bioenergy sorghum.  
 ## Baseline
 ### Generate results based on pretrained models  
   1. Download the pretrained model weights at https://sorghumsnpbenchmark.com/ and put it under `results/model/`
