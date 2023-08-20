@@ -5,8 +5,8 @@ import pandas as pd
 class BitPackMixin:
 
     def __init__(self):
-        unpacked = False
-        label_arr = None
+        self.unpacked = False
+        self.label_arr = None
 
     def unpack_all(self):
         self.label_arr = np.unpackbits(self.label_arr, axis=0, count=self.num_imgs).astype(bool)
