@@ -27,6 +27,7 @@ The reproduce the baseline results using these model, first clone this repositor
 ### Finetuning a model with Pretrain Dataset
 If you would prefer to train your own pretrained model, you can download the imagery from https://cs.slu.edu/~astylianou/neurips_sorghum_dataset/genetic_marker_pretrain_dataset.tar.gz (70GB). These images are from entirely different lines of sorghum grown in a different season under the TERRA-REF gantry, so there is no risk of data leakage for the SGxP benchmark tasks.
 
+After you have downloaded the images and cloned this repository, follow these steps:
   1. Modify the dataset folder location in `tasks/s9_pretrain_rgb_jpg_res50_512_softmax_ebd.py` and `tasks/s9_pretrain_scnr3d_jpg_res50_512_softmax_ebd.py` to the location where you downloaded the imagery.
   2. Run `python -m tasks.s9_pretrain_rgb_jpg_res50_512_softmax_ebd` for RGB model finetuning and `python -m tasks.s9_pretrain_scnr3d_jpg_res50_512_softmax_ebd` for 3D scanner finetuning
 
