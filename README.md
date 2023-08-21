@@ -14,25 +14,34 @@ This repository includes code to load data in the SGxP Benchmark, and to reprodu
 The full dataset, leaderboard (including baseline results) and discussion forums can be found at http://sorghumsnpbenchmark.com.
   
 ## Dataset Quick Start Guide
-### Download 
-#### Sample Dataset
-To quickly get started with the sample dataset, follow these steps:
+### Download Sampled Dataset
 
-1. **Install the required packages:**
+To quickly get started with the sampled dataset, follow these steps:
+   
+1. **Clone the Repository:**
+
+    Clone this repository to your local machine using the following command:
+
+    ```bash
+    git clone https://github.com/SLUVisLab/sorghum_snp_prediction.git
+    ```
+2. **Install the required packages:**
 
     ```bash
     pip install -r requirements_dataset_tools.txt
     ```
 
-2. **Download the sample dataset:**
+3. **Download the sampled dataset:**
 
     ```python
-    import SorghumSNPDataset
+    from dataset_tools import SorghumSNPDataset
 
     ds = SorghumSNPDataset('path/to/the/dataset', sample_ds=True, sensor='rgb', train=True, download=True)
     ```
 
-#### Full Dataset
+[Detail of sampled dataset](https://github.com/SLUVisLab/sorghum_snp_prediction/wiki/SG%C3%97P-Wiki#sampled-dataset)
+
+### Download Full Dataset
 
 For the full dataset, please note that due to the size of images, the code does not handle downloading the images directly. Follow these steps:
 
@@ -65,6 +74,17 @@ img_paths, labels = ds['sobic_001G269200_1_51589435']
 
 # By marker index
 img_paths, labels = ds[0]
+```
+
+### Multimodal Dataset
+
+Once you have downloaded the dataset (full or sampled), you can use the following code to obtain paths to image pairs and labels for the marker specific multimodal dataset:
+
+```python
+from dataset_tools import SorghumSNPMultimodalDataset
+
+ds = SorghumSNPMultimodalDataset('path/to/the/dataset', marker='known', sample_ds=False, train=True)
+img_pair_paths, labels = ds[0]
 ```
 
 
