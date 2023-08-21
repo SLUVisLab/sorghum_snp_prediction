@@ -13,19 +13,78 @@ This repository includes code to load data in the SGxP Benchmark, and to reprodu
 
 The full dataset, leaderboard (including baseline results) and discussion forums can be found at http://sorghumsnpbenchmark.com.
   
+## Dataset Quick Start Guide
+### Download 
+#### Sample Dataset
+To quickly get started with the sample dataset, follow these steps:
+
+1. **Install the required packages:**
+
+    ```bash
+    pip install -r requirements_dataset_tools.txt
+    ```
+
+2. **Download and use the sample dataset:**
+
+    ```python
+    import SorghumSNPDataset
+
+    ds = SorghumSNPDataset('path/to/the/dataset', sample_ds=True, sensor='rgb', train=True, download=True)
+    ```
+
+#### Full Dataset
+
+For the full dataset, please note that due to the size of images, the code does not handle downloading the images directly. Follow these steps:
+
+1. **Download the images:**
+   
+    [images.tar.gz](https://cs.slu.edu/~astylianou/neurips_sorghum_dataset/images.tar.gz) (230GB)
+
+2. **Organize the images:**
+
+    Place the downloaded file `images.tar.gz` under the dataset folder and untar it. The folder structure should look like this:
+    
+    ```
+    path/to/dataset/images/[sensor]/[cultivar]/[image]
+    ```
+
+3. **Download all the labels:**
+
+    After setting up the images, use the provided code to download all the labels:
+    
+    ```python
+    ds = SorghumSNPDataset('path/to/dataset/', marker='known', sensor='rgb', train=True, download=True)
+    ```
+### Get Marker Specific Dataset
+
+Once you have the dataset downloaded and organized, you can obtain image paths and labels specific to a marker by either its name or index:
+
+```python
+# By marker name
+img_paths, labels = ds['sobic_001G269200_1_51589435']
+
+# By marker index
+img_paths, labels = ds[0]
+```
+
+
 ## Baseline
 For all of the tasks included in the SGxP benchmark, we include the performance on a baseline model that was pretrained on TERRA-REF imagery from a different season (see the paper for more details).
 
-You can download the pre-trained weights for each sensor at https://cs.slu.edu/~astylianou/neurips_sorghum_dataset/baseline_model_and_ebd.tar.gz.
+You can download the pre-trained weights for each sensor:
+[baseline_model_and_ebd.tar.gz](https://cs.slu.edu/~astylianou/neurips_sorghum_dataset/baseline_model_and_ebd.tar.gz)
 
 ### Generating results based on pretrained models  
 The reproduce the baseline results using these model, first clone this repository and follow these steps:
-  1. Put the pretrained models under `results/model/`
-  2. Run `notebooks/gene_embeddings.ipynb` to get the image embeddings.
-  3. Run `known_gene_pred.ipynb` to compute the accuracy for each genetic markers.
+  1. Install the required packages: `pip install -r requirements.txt`
+  2. Put the pretrained models under `results/model/`
+  3. Run `notebooks/gene_embeddings.ipynb` to get the image embeddings.
+  4. Run `known_gene_pred.ipynb` to compute the accuracy for each genetic markers.
 
 ### Finetuning a model with Pretrain Dataset
-If you would prefer to train your own pretrained model, you can download the imagery from https://cs.slu.edu/~astylianou/neurips_sorghum_dataset/genetic_marker_pretrain_dataset.tar.gz (70GB). These images are from entirely different lines of sorghum grown in a different season under the TERRA-REF gantry, so there is no risk of data leakage for the SGxP benchmark tasks.
+If you would prefer to train your own pretrained model, you can download the imagery here:
+ [genetic_marker_pretrain_dataset.tar.gz](https://cs.slu.edu/~astylianou/neurips_sorghum_dataset/genetic_marker_pretrain_dataset.tar.gz) (70GB). 
+ These images are from entirely different lines of sorghum grown in a different season under the TERRA-REF gantry, so there is no risk of data leakage for the SGxP benchmark tasks.
 
 After you have downloaded the images and cloned this repository, follow these steps:
   1. Modify the dataset folder location in `tasks/s9_pretrain_rgb_jpg_res50_512_softmax_ebd.py` and `tasks/s9_pretrain_scnr3d_jpg_res50_512_softmax_ebd.py` to the location where you downloaded the imagery.
