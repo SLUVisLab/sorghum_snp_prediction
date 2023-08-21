@@ -14,7 +14,7 @@ This repository includes code to load data in the SGxP Benchmark, and to reprodu
 The full dataset, leaderboard (including baseline results) and discussion forums can be found at http://sorghumsnpbenchmark.com.
   
 ## Dataset Quick Start Guide
-### Download Sampled Dataset
+### Download Sample Dataset
 
 To quickly get started with the sample dataset, follow these steps:
    
@@ -78,7 +78,7 @@ img_paths, labels = ds[0]
 
 ### Multimodal Dataset
 
-Once you have downloaded the dataset (full or sampled), you can use the following code to obtain paths to image pairs and labels for the marker specific multimodal dataset:
+Once you have downloaded the dataset (full or sample), you can use the following code to obtain paths to image pairs and labels for the marker specific multimodal dataset:
 
 ```python
 from dataset_tools import SorghumSNPMultimodalDataset
