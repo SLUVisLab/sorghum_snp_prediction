@@ -183,6 +183,9 @@ class SorghumSNPDataset(BitPackMixin, DownloadSNPDatasetMixin):
         img_paths = self.img_meta_df.iloc[np.argwhere(unpacked[:, 0])[:, 0]]['filepath'].values
         return img_paths, labels
     
+    def __getitem__(self, query):
+        return self.get_snp_labels(query)
+    
 
 class SorghumSNPMultimodalDataset(BitPackMixin):
     def __init__(self, folder, known=True, train=True, sample_ds=False, download=False) -> None:
@@ -233,3 +236,7 @@ class SorghumSNPMultimodalDataset(BitPackMixin):
         labels = unpacked[unpacked[:, 0], 1]
         img_paths = self.img_meta_df.iloc[np.argwhere(unpacked[:, 0])[:, 0]][['3d_filepath', 'rgb_filepath']].values
         return img_paths, labels
+    
+    def __getitem__(self, query):
+        return self.get_snp_labels(query)
+    
