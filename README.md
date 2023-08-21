@@ -24,7 +24,7 @@ To quickly get started with the sample dataset, follow these steps:
     pip install -r requirements_dataset_tools.txt
     ```
 
-2. **Download and use the sample dataset:**
+2. **Download the sample dataset:**
 
     ```python
     import SorghumSNPDataset
