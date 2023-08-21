@@ -1,6 +1,11 @@
-import os
+import os, shutil
 import numpy as np
+import warnings
 import pandas as pd
+import tarfile
+import requests
+from tqdm.auto import tqdm
+
 
 class BitPackMixin:
     '''
@@ -30,9 +35,77 @@ class BitPackMixin:
             return self.label_arr[:, query, :]
         else:   
             return np.unpackbits(self.label_arr[:, query, :], axis=0, count=self.img_meta_df.shape[0]).astype(bool)
+        
+
+class DownloadSNPDatasetMixin:
+    IMG_URL = ''
+    LABEL_URL = 'https://cs.slu.edu/~astylianou/neurips_sorghum_dataset/bitwise_labels.tar.gz'
+    SAMPLE_DS_URL = 'https://cs.slu.edu/~astylianou/neurips_sorghum_dataset/genetic_marker_sample_dataset.tar.gz'
+
+    def __init__(self, download=False):
+        self.download = download
+        if download:
+            if not os.path.exists(self.folder):
+                os.makedirs(self.folder)
+            self.download_dataset()
+
+    def check_integrity(self):
+        # only check marker folder exist 
+        if self.sample_ds:
+            # check sample dataset
+            if os.path.exists(os.path.join(self.folder, 'sample_markers')) \
+               and os.path.exists(os.path.join(self.folder, 'images')):
+                return True
+            else:
+                return False
+        else:
+            # check full dataset
+            # TODO: check image list completeness
+            if os.path.exists(os.path.join(self.folder, 'known_markers')) \
+               and os.path.exists(os.path.join(self.folder, 'unknown_markers')) \
+               and os.path.exists(os.path.join(self.folder, 'images')):
+                return True
+            else:
+                return False
+    
+    def extract(self):
+        if self.sample_ds:
+            filename = DownloadSNPDatasetMixin.SAMPLE_DS_URL.split('/')[-1]
+        else:
+            filename = DownloadSNPDatasetMixin.LABEL_URL.split('/')[-1]
+        with tarfile.open(os.path.join(self.folder, filename), 'r:gz') as tar:
+            members = tar.getmembers()
+            for member in tqdm(members, total=len(members), desc='Untarring... \t'):
+                member.path = os.sep.join(member.path.split(os.sep)[1:])
+                tar.extract(member=member, path=self.folder)
+
+    def download_dataset(self):
+        im_exist = None
+        if self.check_integrity():
+            return
+        if self.sample_ds:
+            dl_url = DownloadSNPDatasetMixin.SAMPLE_DS_URL
+        else:       
+            dl_url = DownloadSNPDatasetMixin.LABEL_URL
+            if not os.path.exists(os.path.join(self.folder, 'images')):
+                im_exist = False
+                warnings.warn('Image folder does not exist. Please follow the instructions in the README.md to download the images.' +
+                              'The label files will be downloaded and extracted now.', UserWarning)
+        # ssl cert for cs.slu.edu has incomplete chain, so we need to set verify=False
+        r = requests.get(dl_url, stream=True, verify=False)
+        if r.status_code != 200:
+            r.raise_for_status()
+        file_size = int(r.headers.get('Content-Length', 0))
+        with tqdm.wrapattr(r.raw, "read", total=file_size, desc='Downloading... \t') as r_raw:
+            with open(os.path.join(self.folder, dl_url.split('/')[-1]), 'wb') as f:
+                shutil.copyfileobj(r_raw, f)
+
+        self.extract()
+        if im_exist == False:
+            raise FileNotFoundError('Label files downloaded. Please follow the instructions in the README.md to download the images.')
 
 
-class SorghumSNPDataset(BitPackMixin):
+class SorghumSNPDataset(BitPackMixin, DownloadSNPDatasetMixin):
     '''
     This class is used to load the sorghum SNP dataset.
     The dataset is stored in a folder with the following structure:
@@ -50,13 +123,14 @@ class SorghumSNPDataset(BitPackMixin):
     - images
     '''
 
-    def __init__(self, folder, known, sensor, train, sample_ds=False) -> None:
+    def __init__(self, folder, known=True, sensor='rgb', train=True, sample_ds=False, download=False) -> None:
         '''
         folder:     str     (path to the dataset folder)
         known:      bool    (True: known, False: unknown)
         sensor:     str     (rgb or 3d)
         train:      bool    (True: train, False: test)
         sample_ds:  bool    (True: sample dataset(ignore arg known), False: full dataset)
+        download:   bool    (True: download the dataset or not)
         '''
         self.folder = folder
         self.known = known
@@ -73,6 +147,7 @@ class SorghumSNPDataset(BitPackMixin):
         self.img_meta_df = None
         self.num_imgs = None
         BitPackMixin.__init__(self)
+        DownloadSNPDatasetMixin.__init__(self, download)
         self.read_meta()
         self.read_labels()
 
@@ -106,13 +181,15 @@ class SorghumSNPDataset(BitPackMixin):
         img_paths = self.img_meta_df.iloc[np.argwhere(unpacked[:, 0])[:, 0]]['filepath'].values
         return img_paths, labels
     
+
 class SorghumSNPMultimodalDataset(BitPackMixin):
-    def __init__(self, folder, known, train, sample_ds=False) -> None:
+    def __init__(self, folder, known=True, train=True, sample_ds=False, download=False) -> None:
         '''
         folder:     str     (path to the dataset folder)
         known:      bool    (True: known, False: unknown)
         train:      bool    (True: train, False: test)
         sample_ds:  bool    (True: sample dataset(ignore arg known), False: full dataset)
+        download:   bool    (True: download the dataset or not)
         '''
         self.folder = folder
         self.known = known
@@ -127,6 +204,7 @@ class SorghumSNPMultimodalDataset(BitPackMixin):
         self.img_meta_df = None
         self.label_arr_packed = None
         BitPackMixin.__init__(self)
+        DownloadSNPDatasetMixin.__init__(self, download)
         self.read_meta()
         self.read_labels()
     
