@@ -16,7 +16,7 @@ The full dataset, leaderboard (including baseline results) and discussion forums
 ## Dataset Quick Start Guide
 ### Download Sampled Dataset
 
-To quickly get started with the sampled dataset, follow these steps:
+To quickly get started with the sample dataset, follow these steps:
    
 1. **Clone the Repository:**
 
@@ -31,7 +31,7 @@ To quickly get started with the sampled dataset, follow these steps:
     pip install -r requirements_dataset_tools.txt
     ```
 
-3. **Download the sampled dataset:**
+3. **Download the sample dataset:**
 
     ```python
     from dataset_tools import SorghumSNPDataset
@@ -39,7 +39,7 @@ To quickly get started with the sampled dataset, follow these steps:
     ds = SorghumSNPDataset('path/to/the/dataset', sample_ds=True, sensor='rgb', train=True, download=True)
     ```
 
-[Detail of sampled dataset](https://github.com/SLUVisLab/sorghum_snp_prediction/wiki/SG%C3%97P-Wiki#sampled-dataset)
+[Detail of sample dataset](https://github.com/SLUVisLab/sorghum_snp_prediction/wiki/SG%C3%97P-Wiki#sampled-dataset)
 
 ### Download Full Dataset
 
