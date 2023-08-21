@@ -17,14 +17,21 @@ The full dataset, leaderboard (including baseline results) and discussion forums
 ### Download 
 #### Sample Dataset
 To quickly get started with the sample dataset, follow these steps:
+   
+1. **Clone the Repository:**
 
-1. **Install the required packages:**
+    Clone this repository to your local machine using the following command:
+
+    ```bash
+    git clone https://github.com/SLUVisLab/sorghum_snp_prediction.git
+    ```
+2. **Install the required packages:**
 
     ```bash
     pip install -r requirements_dataset_tools.txt
     ```
 
-2. **Download the sample dataset:**
+3. **Download the sample dataset:**
 
     ```python
     from dataset_tools import SorghumSNPDataset
