@@ -3,19 +3,29 @@ import numpy as np
 import pandas as pd
 
 class BitPackMixin:
+    '''
+    This class is used to handle unpacking the bitwise labels. The labels are stored in a numpy array with shape (m, n, 2), 
+    where m is the number of images, n is the number of markers. The first channel represents whether the image has the 
+    marker, the second channel represents the label of the marker. The labels are packed into bits to save space.
+    '''
 
     def __init__(self):
         self.unpacked = False
         self.label_arr = None
+
+    def read_labels(self):
+        raise NotImplementedError('read_labels is not implemented yet.')
 
     def unpack_all(self):
         self.label_arr = np.unpackbits(self.label_arr, axis=0, count=self.num_imgs).astype(bool)
         self.unpacked = True
 
     def unpack_marker(self, query):
-        # query:    int or list
-        # unpack single marker, return column [m, n, 2]
-        # m is number of images, n is number of markers
+        '''
+        query:    int or list
+        unpack single marker, return shape [m, n, 2]
+        m is number of images, n is number of markers in query
+        '''
         if self.unpacked:
             return self.label_arr[:, query, :]
         else:   
