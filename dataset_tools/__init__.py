@@ -1,2 +1,2 @@
-from bitwise_dataset import SorghumSNPDataset, SorghumSNPMultimodalDataset
+from .bitwise_dataset import SorghumSNPDataset, SorghumSNPMultimodalDataset
 
