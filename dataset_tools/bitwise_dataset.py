@@ -179,8 +179,9 @@ class SorghumSNPDataset(BitPackMixin, DownloadSNPDatasetMixin):
             assert query in self.marker_meta_df['marker'].values, f'marker {query} is not in the dataset.'
             query = self.marker_meta_df[self.marker_meta_df['marker'] == query].index[0]
         unpacked = self.unpack_marker(query)
-        labels = unpacked[unpacked[:, 0], 1]
+        labels = list(unpacked[unpacked[:, 0], 1])
         img_paths = self.img_meta_df.iloc[np.argwhere(unpacked[:, 0])[:, 0]]['filepath'].values
+        img_paths =  [os.path.join(self.folder, i) for i in img_paths]
         return img_paths, labels
     
     def __getitem__(self, query):
@@ -233,8 +234,9 @@ class SorghumSNPMultimodalDataset(BitPackMixin):
             assert query in self.marker_meta_df['marker'].values, f'marker {query} is not in the dataset.'
             query = self.marker_meta_df[self.marker_meta_df['marker'] == query].index[0]
         unpacked = self.unpack_marker(query)
-        labels = unpacked[unpacked[:, 0], 1]
+        labels = list(unpacked[unpacked[:, 0], 1])
         img_paths = self.img_meta_df.iloc[np.argwhere(unpacked[:, 0])[:, 0]][['3d_filepath', 'rgb_filepath']].values
+        img_paths =  [os.path.join(self.folder, i) for i in img_paths]
         return img_paths, labels
     
     def __getitem__(self, query):
