@@ -1,0 +1,16 @@
+experimental==0.9.7
+faiss==1.7.1
+hparam==0.1.4
+matplotlib==3.3.3
+neptune==1.6.0
+numpy==1.20.1
+pandas==1.1.5
+Pillow==8.3.2
+Pillow==10.0.0
+pytorch_metric_learning==1.2.1
+Requests==2.31.0
+scikit_learn==0.23.2
+tester==1.0.0
+torch==1.9.0
+torchvision==0.2.2
+tqdm==4.54.1
