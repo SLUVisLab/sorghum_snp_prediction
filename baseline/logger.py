@@ -8,7 +8,7 @@ from torch.utils.tensorboard.summary import hparams
 try:
     import neptune
 except ImportError:
-    warnings.warn('Neptune is not installed. NeptuneLogger will not work.')
+    warnings.warn('Neptune is not installed. NeptuneLogger will not work.', ImportWarning)
 
 class SummaryWriter(SummaryWriter):
     def add_hparams(
