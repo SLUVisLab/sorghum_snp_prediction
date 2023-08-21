@@ -27,7 +27,7 @@ To quickly get started with the sample dataset, follow these steps:
 2. **Download the sample dataset:**
 
     ```python
-    import SorghumSNPDataset
+    from dataset_tools import SorghumSNPDataset
 
     ds = SorghumSNPDataset('path/to/the/dataset', sample_ds=True, sensor='rgb', train=True, download=True)
     ```
@@ -65,6 +65,17 @@ img_paths, labels = ds['sobic_001G269200_1_51589435']
 
 # By marker index
 img_paths, labels = ds[0]
+```
+
+### Multimodal Dataset
+
+Once you have downloaded the dataset (full or sampled), you can use the following code to obtain paths to image pairs and labels for the marker specific multimodal dataset:
+
+```python
+from dataset_tools import SorghumSNPMultimodalDataset
+
+ds = SorghumSNPMultimodalDataset('path/to/the/dataset', marker='known', sample=False, train=True, download=True)
+img_pair_paths, labels = ds[0]
 ```
 
 
