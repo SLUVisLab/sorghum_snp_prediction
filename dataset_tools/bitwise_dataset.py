@@ -48,6 +48,8 @@ class DownloadSNPDatasetMixin:
             if not os.path.exists(self.folder):
                 os.makedirs(self.folder)
             self.download_dataset()
+        else:
+            assert self.check_integrity(), FileNotFoundError('Dataset is not found. Please download the dataset first.')
 
     def check_integrity(self):
         # only check marker folder exist 
