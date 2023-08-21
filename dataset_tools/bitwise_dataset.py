@@ -163,6 +163,7 @@ class SorghumSNPDataset(BitPackMixin, DownloadSNPDatasetMixin):
     def read_meta(self):
         self.marker_meta_df = pd.read_csv(self.subfolder(f'{self.known_str}/gene_marker_metadata.csv'))
         self.img_meta_df = pd.read_csv(self.subfolder(f'{self.known_str}/{self.sensor}/image_metadata.csv'))
+        self.img_meta_df['filepath'] = self.img_meta_df['filepath'].apply(lambda x: os.path.join(self.folder, x))
         self.num_imgs = self.img_meta_df.shape[0]
 
     def read_labels(self):
@@ -179,10 +180,12 @@ class SorghumSNPDataset(BitPackMixin, DownloadSNPDatasetMixin):
             assert query in self.marker_meta_df['marker'].values, f'marker {query} is not in the dataset.'
             query = self.marker_meta_df[self.marker_meta_df['marker'] == query].index[0]
         unpacked = self.unpack_marker(query)
-        labels = list(unpacked[unpacked[:, 0], 1])
+        labels = unpacked[unpacked[:, 0], 1]
         img_paths = self.img_meta_df.iloc[np.argwhere(unpacked[:, 0])[:, 0]]['filepath'].values
-        img_paths =  [os.path.join(self.folder, i) for i in img_paths]
         return img_paths, labels
+    
+    def __len__(self):
+        return self.num_imgs
     
     def __getitem__(self, query):
         return self.get_snp_labels(query)
@@ -209,6 +212,7 @@ class SorghumSNPMultimodalDataset(BitPackMixin):
         self.marker_meta_df = None
         self.img_meta_df = None
         self.label_arr_packed = None
+        self.num_img_pairs = None
         BitPackMixin.__init__(self)
         DownloadSNPDatasetMixin.__init__(self, download)
         self.read_meta()
@@ -220,6 +224,9 @@ class SorghumSNPMultimodalDataset(BitPackMixin):
     def read_meta(self):
         self.marker_meta_df = pd.read_csv(self.subfolder(f'{self.known_str}/gene_marker_metadata.csv'))
         self.img_meta_df = pd.read_csv(self.subfolder(f'{self.known_str}/multimodal/image_pair_metadata.csv'))
+        self.img_meta_df['3d_filepath'] = self.img_meta_df['3d_filepath'].apply(lambda x: os.path.join(self.folder, x))
+        self.img_meta_df['rgb_filepath'] = self.img_meta_df['rgb_filepath'].apply(lambda x: os.path.join(self.folder, x))
+        self.num_img_pairs = self.img_meta_df.shape[0]
 
     def read_labels(self):
         self.label_arr = np.load(self.subfolder(f'{self.known_str}/multimodal/{self.train_str}_labels.npy'))
@@ -238,6 +245,9 @@ class SorghumSNPMultimodalDataset(BitPackMixin):
         img_paths = self.img_meta_df.iloc[np.argwhere(unpacked[:, 0])[:, 0]][['3d_filepath', 'rgb_filepath']].values
         img_paths =  [os.path.join(self.folder, i) for i in img_paths]
         return img_paths, labels
+    
+    def __len__(self):
+        return self.num_img_pairs
     
     def __getitem__(self, query):
         return self.get_snp_labels(query)
