@@ -39,7 +39,7 @@ To quickly get started with the sample dataset, follow these steps:
     ds = SorghumSNPDataset('path/to/the/dataset', sample_ds=True, sensor='rgb', train=True, download=True)
     ```
 
-[Detail of sample dataset](https://github.com/SLUVisLab/sorghum_snp_prediction/wiki/SG%C3%97P-Wiki#sampled-dataset)
+[Detail of sample dataset](https://github.com/SLUVisLab/sorghum_snp_prediction/wiki/SG%C3%97P-Wiki#sampled-dataset) | [Image Metadata Readme](https://cs.slu.edu/~astylianou/neurips_sorghum_dataset/metadata_readme.txt)
 
 ### Download Full Dataset
 
