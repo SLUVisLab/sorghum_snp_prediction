@@ -125,7 +125,7 @@ class SorghumSNPDataset(BitPackMixin, DownloadSNPDatasetMixin):
     - images
     '''
 
-    def __init__(self, folder, known=True, sensor='rgb', train=True, sample_ds=False, download=False) -> None:
+    def __init__(self, folder, known=True, sensor='rgb', train=True, sample_ds=False, download=False, prefix_path=True) -> None:
         '''
         folder:     str     (path to the dataset folder)
         known:      bool    (True: known, False: unknown)
@@ -148,6 +148,7 @@ class SorghumSNPDataset(BitPackMixin, DownloadSNPDatasetMixin):
         self.marker_meta_df = None
         self.img_meta_df = None
         self.num_imgs = None
+        self.prefix_path = prefix_path
         BitPackMixin.__init__(self)
         DownloadSNPDatasetMixin.__init__(self, download)
         self.read_meta()
@@ -163,7 +164,8 @@ class SorghumSNPDataset(BitPackMixin, DownloadSNPDatasetMixin):
     def read_meta(self):
         self.marker_meta_df = pd.read_csv(self.subfolder(f'{self.known_str}/gene_marker_metadata.csv'))
         self.img_meta_df = pd.read_csv(self.subfolder(f'{self.known_str}/{self.sensor}/image_metadata.csv'))
-        self.img_meta_df['filepath'] = self.img_meta_df['filepath'].apply(lambda x: os.path.join(self.folder, x))
+        if self.prefix_path:
+            self.img_meta_df['filepath'] = self.img_meta_df['filepath'].apply(lambda x: os.path.join(self.folder, x))
         self.num_imgs = self.img_meta_df.shape[0]
 
     def read_labels(self):
@@ -191,8 +193,8 @@ class SorghumSNPDataset(BitPackMixin, DownloadSNPDatasetMixin):
         return self.get_snp_labels(query)
     
 
-class SorghumSNPMultimodalDataset(BitPackMixin):
-    def __init__(self, folder, known=True, train=True, sample_ds=False, download=False) -> None:
+class SorghumSNPMultimodalDataset(BitPackMixin, DownloadSNPDatasetMixin):
+    def __init__(self, folder, known=True, train=True, sample_ds=False, download=False, prefix_path=True) -> None:
         '''
         folder:     str     (path to the dataset folder)
         known:      bool    (True: known, False: unknown)
@@ -213,6 +215,7 @@ class SorghumSNPMultimodalDataset(BitPackMixin):
         self.img_meta_df = None
         self.label_arr_packed = None
         self.num_img_pairs = None
+        self.prefix_path = prefix_path
         BitPackMixin.__init__(self)
         DownloadSNPDatasetMixin.__init__(self, download)
         self.read_meta()
@@ -224,8 +227,9 @@ class SorghumSNPMultimodalDataset(BitPackMixin):
     def read_meta(self):
         self.marker_meta_df = pd.read_csv(self.subfolder(f'{self.known_str}/gene_marker_metadata.csv'))
         self.img_meta_df = pd.read_csv(self.subfolder(f'{self.known_str}/multimodal/image_pair_metadata.csv'))
-        self.img_meta_df['3d_filepath'] = self.img_meta_df['3d_filepath'].apply(lambda x: os.path.join(self.folder, x))
-        self.img_meta_df['rgb_filepath'] = self.img_meta_df['rgb_filepath'].apply(lambda x: os.path.join(self.folder, x))
+        if self.prefix_path:
+            self.img_meta_df['3d_filepath'] = self.img_meta_df['3d_filepath'].apply(lambda x: os.path.join(self.folder, x))
+            self.img_meta_df['rgb_filepath'] = self.img_meta_df['rgb_filepath'].apply(lambda x: os.path.join(self.folder, x))
         self.num_img_pairs = self.img_meta_df.shape[0]
 
     def read_labels(self):

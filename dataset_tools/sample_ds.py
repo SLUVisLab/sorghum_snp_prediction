@@ -10,7 +10,7 @@ ds_root = '/data/shared/genetic_marker_dataset_bitwise_label/'
 sample_ds_root = '/data/shared/genetic_marker_sample_dataset'
 sample_ds_marker_root = '/data/shared/genetic_marker_sample_dataset/sample_markers'
 sample_marker_idx = [3, 6, 9]
-start_date = date(2017, 6, 20) # inculde
+start_date = date(2017, 6, 5) # inculde
 end_date = date(2017, 6, 27) # exclude
 
 def parse_date(df):
@@ -20,10 +20,10 @@ def parse_date(df):
     df['date'] = df['3d_filepath'].apply(get_date)
 
 
-train_mm_ds = SorghumSNPMultimodalDataset(ds_root, known=True, train=True)
-train_mm_unpacked_label_arr = np.unpackbits(train_mm_ds.label_arr_packed, axis=0, count=train_mm_ds.img_meta_df.shape[0]).astype(bool)
-test_mm_ds = SorghumSNPMultimodalDataset(ds_root, known=True, train=False)
-test_mm_unpacked_label_arr = np.unpackbits(test_mm_ds.label_arr_packed, axis=0, count=test_mm_ds.img_meta_df.shape[0]).astype(bool)
+train_mm_ds = SorghumSNPMultimodalDataset(ds_root, known=True, train=True, prefix_path=False)
+train_mm_unpacked_label_arr = np.unpackbits(train_mm_ds.label_arr, axis=0, count=train_mm_ds.img_meta_df.shape[0]).astype(bool)
+test_mm_ds = SorghumSNPMultimodalDataset(ds_root, known=True, train=False, prefix_path=False)
+test_mm_unpacked_label_arr = np.unpackbits(test_mm_ds.label_arr, axis=0, count=test_mm_ds.img_meta_df.shape[0]).astype(bool)
 
 train_mm_sample_pool = np.argwhere(train_mm_unpacked_label_arr[:,sample_marker_idx,0].all(1))
 test_mm_sample_pool = np.argwhere(test_mm_unpacked_label_arr[:,sample_marker_idx,0].all(1))
@@ -37,10 +37,10 @@ test_mm_sample_pool_df.drop_duplicates(subset=['rgb_filepath'], inplace=True)
 parse_date(train_mm_sample_pool_df)
 parse_date(test_mm_sample_pool_df)
 
-start_date = date(2017, 6, 20) # inculde
-end_date = date(2017, 6, 27) # exclude
-train_mm_sample_pool_date_limited_df = train_mm_sample_pool_df[(train_mm_sample_pool_df['date'] <= start_date) & (train_mm_sample_pool_df['date'] < end_date)]
-test_mm_sample_pool_date_limited_df = test_mm_sample_pool_df[(test_mm_sample_pool_df['date'] <= start_date) & (test_mm_sample_pool_df['date'] < end_date)]
+train_mm_sample_pool_date_limited_df = train_mm_sample_pool_df[(train_mm_sample_pool_df['date'] >= start_date) & (train_mm_sample_pool_df['date'] < end_date)]
+test_mm_sample_pool_date_limited_df = test_mm_sample_pool_df[(test_mm_sample_pool_df['date'] >= start_date) & (test_mm_sample_pool_df['date'] < end_date)]
+print('num of train images: ', train_mm_sample_pool_date_limited_df.shape[0])
+print('num of train images: ', test_mm_sample_pool_date_limited_df.shape[0])
 
 sampled_train_mm_df = train_mm_sample_pool_date_limited_df.sample(800, random_state=42)
 sampled_test_mm_df = test_mm_sample_pool_date_limited_df.sample(200, random_state=42)
@@ -101,20 +101,20 @@ sampled_d3_df.to_csv(os.path.join(sample_ds_marker_root, '3d', 'image_metadata.c
 
 # 5. subset rgb 3d labels.
 sensor='rgb'
-train_ds = SorghumSNPDataset(ds_root, known=True, sensor=sensor, train=True)
-train_unpacked_label_arr = np.unpackbits(train_ds.label_arr_packed, axis=0, count=train_ds.img_meta_df.shape[0]).astype(bool)
-test_ds = SorghumSNPDataset(ds_root, known=True, sensor=sensor, train=False)
-test_unpacked_label_arr = np.unpackbits(test_ds.label_arr_packed, axis=0, count=test_ds.img_meta_df.shape[0]).astype(bool)
+train_ds = SorghumSNPDataset(ds_root, known=True, sensor=sensor, train=True, prefix_path=False)
+train_unpacked_label_arr = np.unpackbits(train_ds.label_arr, axis=0, count=train_ds.img_meta_df.shape[0]).astype(bool)
+test_ds = SorghumSNPDataset(ds_root, known=True, sensor=sensor, train=False, prefix_path=False)
+test_unpacked_label_arr = np.unpackbits(test_ds.label_arr, axis=0, count=test_ds.img_meta_df.shape[0]).astype(bool)
 sampled_train_unpacked_label_arr = train_unpacked_label_arr[sampled_rgb_df['original_id']][:, sample_marker_idx]
 sampled_test_unpacked_label_arr = test_unpacked_label_arr[sampled_rgb_df['original_id']][:, sample_marker_idx]
 np.save(os.path.join(sample_ds_marker_root, sensor, 'train_labels.npy'), np.packbits(sampled_train_unpacked_label_arr, axis=0))
 np.save(os.path.join(sample_ds_marker_root, sensor, 'test_labels.npy'), np.packbits(sampled_test_unpacked_label_arr, axis=0))
 
 sensor='3d'
-train_ds = SorghumSNPDataset(ds_root, known=True, sensor=sensor, train=True)
-train_unpacked_label_arr = np.unpackbits(train_ds.label_arr_packed, axis=0, count=train_ds.img_meta_df.shape[0]).astype(bool)
-test_ds = SorghumSNPDataset(ds_root, known=True, sensor=sensor, train=False)
-test_unpacked_label_arr = np.unpackbits(test_ds.label_arr_packed, axis=0, count=test_ds.img_meta_df.shape[0]).astype(bool)
+train_ds = SorghumSNPDataset(ds_root, known=True, sensor=sensor, train=True, prefix_path=False)
+train_unpacked_label_arr = np.unpackbits(train_ds.label_arr, axis=0, count=train_ds.img_meta_df.shape[0]).astype(bool)
+test_ds = SorghumSNPDataset(ds_root, known=True, sensor=sensor, train=False, prefix_path=False)
+test_unpacked_label_arr = np.unpackbits(test_ds.label_arr, axis=0, count=test_ds.img_meta_df.shape[0]).astype(bool)
 sampled_train_unpacked_label_arr = train_unpacked_label_arr[sampled_d3_df['original_id']][:, sample_marker_idx]
 sampled_test_unpacked_label_arr = test_unpacked_label_arr[sampled_d3_df['original_id']][:, sample_marker_idx]
 np.save(os.path.join(sample_ds_marker_root, sensor, 'train_labels.npy'), np.packbits(sampled_train_unpacked_label_arr, axis=0))
