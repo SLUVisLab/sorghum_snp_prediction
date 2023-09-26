@@ -14,14 +14,20 @@ This repository includes code to load data in the SGxP Benchmark, and to reprodu
 The full dataset, leaderboard (including baseline results) and discussion forums can be found at http://sorghumsnpbenchmark.com.
   
 ## Dataset Quick Start Guide
-### Download 
-#### Sample Dataset
+### Download Sample Dataset
+
 To quickly get started with the sample dataset, follow these steps:
    
 1. **Clone the Repository:**
+<<<<<<< HEAD
 
     Clone this repository to your local machine using the following command:
 
+=======
+
+    Clone this repository to your local machine using the following command:
+
+>>>>>>> d314de073af2e2dc1690ae593178855dda47b026
     ```bash
     git clone https://github.com/SLUVisLab/sorghum_snp_prediction.git
     ```
@@ -39,7 +45,9 @@ To quickly get started with the sample dataset, follow these steps:
     ds = SorghumSNPDataset('path/to/the/dataset', sample_ds=True, sensor='rgb', train=True, download=True)
     ```
 
-#### Full Dataset
+[Detail of sample dataset](https://github.com/SLUVisLab/sorghum_snp_prediction/wiki/SG%C3%97P-Wiki#sampled-dataset) | [Image Metadata Readme](https://cs.slu.edu/~astylianou/neurips_sorghum_dataset/metadata_readme.txt)
+
+### Download Full Dataset
 
 For the full dataset, please note that due to the size of images, the code does not handle downloading the images directly. Follow these steps:
 
@@ -76,12 +84,20 @@ img_paths, labels = ds[0]
 
 ### Multimodal Dataset
 
+<<<<<<< HEAD
 Once you have downloaded the dataset (full or sampled), you can use the following code to obtain paths to image pairs and labels for the marker specific multimodal dataset:
+=======
+Once you have downloaded the dataset (full or sample), you can use the following code to obtain paths to image pairs and labels for the marker specific multimodal dataset:
+>>>>>>> d314de073af2e2dc1690ae593178855dda47b026
 
 ```python
 from dataset_tools import SorghumSNPMultimodalDataset
 
+<<<<<<< HEAD
 ds = SorghumSNPMultimodalDataset('path/to/the/dataset', marker='known', sample=False, train=True, download=True)
+=======
+ds = SorghumSNPMultimodalDataset('path/to/the/dataset', marker='known', sample_ds=False, train=True)
+>>>>>>> d314de073af2e2dc1690ae593178855dda47b026
 img_pair_paths, labels = ds[0]
 ```
 
@@ -99,10 +115,9 @@ The reproduce the baseline results using these model, first clone this repositor
   3. Run `notebooks/gene_embeddings.ipynb` to get the image embeddings.
   4. Run `known_gene_pred.ipynb` to compute the accuracy for each genetic markers.
 
-### Finetuning a model with Pretrain Dataset
-If you would prefer to train your own pretrained model, you can download the imagery here:
+### Finetuning or training a model with an independent dataset
+If you would prefer to train your own model, we have imagery from entirely different lines of sorghum grown in a different season under the TERRA-REF gantry, so there is no risk of data leakage for the SGxP benchmark tasks.  You can download the imagery here:
  [genetic_marker_pretrain_dataset.tar.gz](https://cs.slu.edu/~astylianou/neurips_sorghum_dataset/genetic_marker_pretrain_dataset.tar.gz) (70GB). 
- These images are from entirely different lines of sorghum grown in a different season under the TERRA-REF gantry, so there is no risk of data leakage for the SGxP benchmark tasks.
 
 After you have downloaded the images and cloned this repository, follow these steps:
   1. Modify the dataset folder location in `tasks/s9_pretrain_rgb_jpg_res50_512_softmax_ebd.py` and `tasks/s9_pretrain_scnr3d_jpg_res50_512_softmax_ebd.py` to the location where you downloaded the imagery.
