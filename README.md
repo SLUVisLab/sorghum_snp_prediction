@@ -19,15 +19,9 @@ The full dataset, leaderboard (including baseline results) and discussion forums
 To quickly get started with the sample dataset, follow these steps:
    
 1. **Clone the Repository:**
-<<<<<<< HEAD
 
     Clone this repository to your local machine using the following command:
 
-=======
-
-    Clone this repository to your local machine using the following command:
-
->>>>>>> d314de073af2e2dc1690ae593178855dda47b026
     ```bash
     git clone https://github.com/SLUVisLab/sorghum_snp_prediction.git
     ```
@@ -84,20 +78,12 @@ img_paths, labels = ds[0]
 
 ### Multimodal Dataset
 
-<<<<<<< HEAD
-Once you have downloaded the dataset (full or sampled), you can use the following code to obtain paths to image pairs and labels for the marker specific multimodal dataset:
-=======
 Once you have downloaded the dataset (full or sample), you can use the following code to obtain paths to image pairs and labels for the marker specific multimodal dataset:
->>>>>>> d314de073af2e2dc1690ae593178855dda47b026
 
 ```python
 from dataset_tools import SorghumSNPMultimodalDataset
 
-<<<<<<< HEAD
-ds = SorghumSNPMultimodalDataset('path/to/the/dataset', marker='known', sample=False, train=True, download=True)
-=======
 ds = SorghumSNPMultimodalDataset('path/to/the/dataset', marker='known', sample_ds=False, train=True)
->>>>>>> d314de073af2e2dc1690ae593178855dda47b026
 img_pair_paths, labels = ds[0]
 ```
 
