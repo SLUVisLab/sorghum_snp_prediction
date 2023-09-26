@@ -13,7 +13,7 @@ from torchvision import transforms, models
 import numpy as np
 from pytorch_metric_learning import losses as pml_losses
 from genetic_marker_dataset import PretrainImageDataset
-from experimental.network.embedding import SoftmaxEmbeddingNet
+from embedding import SoftmaxEmbeddingNet
 from train import Trainer 
 import util_hooks
 import metric

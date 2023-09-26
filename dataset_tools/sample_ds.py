@@ -11,7 +11,7 @@ sample_ds_root = '/data/shared/genetic_marker_sample_dataset'
 sample_ds_marker_root = '/data/shared/genetic_marker_sample_dataset/sample_markers'
 sample_marker_idx = [3, 6, 9]
 start_date = date(2017, 6, 5) # inculde
-end_date = date(2017, 6, 27) # exclude
+end_date = date(2017, 7, 5) # exclude
 
 def parse_date(df):
     def get_date(i):
@@ -40,7 +40,7 @@ parse_date(test_mm_sample_pool_df)
 train_mm_sample_pool_date_limited_df = train_mm_sample_pool_df[(train_mm_sample_pool_df['date'] >= start_date) & (train_mm_sample_pool_df['date'] < end_date)]
 test_mm_sample_pool_date_limited_df = test_mm_sample_pool_df[(test_mm_sample_pool_df['date'] >= start_date) & (test_mm_sample_pool_df['date'] < end_date)]
 print('num of train images: ', train_mm_sample_pool_date_limited_df.shape[0])
-print('num of train images: ', test_mm_sample_pool_date_limited_df.shape[0])
+print('num of test images: ', test_mm_sample_pool_date_limited_df.shape[0])
 
 sampled_train_mm_df = train_mm_sample_pool_date_limited_df.sample(800, random_state=42)
 sampled_test_mm_df = test_mm_sample_pool_date_limited_df.sample(200, random_state=42)
