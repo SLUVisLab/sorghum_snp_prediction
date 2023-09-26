@@ -112,9 +112,11 @@ def generate_bitwise_multimodal_meta(csv_ds_path, bitwise_ds_path, known):
     known_str = 'known' if known else 'unknown'
     # generate metadat for mm
     mm_train_test_list = glob.glob(f'/data/shared/genetic_marker_datasets/{known_str}_markers/*/multimodal_*.csv')
-    mm_im_path_df = pd.concat([pd.read_csv(f)[['3d_filepath', 'rgb_filepath','label']] for f in tqdm(mm_train_test_list, desc='multimodal')], ignore_index=True)[['3d_filepath', 'rgb_filepath']] \
-                    .drop_duplicates() \
-                    .reset_index(drop=True)
+    mm_im_path_df = pd.DataFrame(columns=['3d_filepath', 'rgb_filepath'])
+    for f in tqdm(mm_train_test_list, desc='multimodal'):
+        f_pd = pd.read_csv(f)[['3d_filepath', 'rgb_filepath']]
+        mm_im_path_df = mm_im_path_df.append(f_pd, ignore_index=True).drop_duplicates()
+    mm_im_path_df = mm_im_path_df.reset_index(drop=True)
     mm_im_path_df.index.name = 'id'
     if not os.path.exists(bitwise_subfolder(f'{known_str}_markers/multimodal/')):
         os.makedirs(bitwise_subfolder(f'{known_str}_markers/multimodal/'))
@@ -146,18 +148,18 @@ def generate_multimodal_bitwise_label(csv_ds_path, bitwise_ds_path, known, train
 if __name__ == '__main__':
     csv_ds_path = '/data/shared/genetic_marker_datasets/'
     bitwise_ds_path = '/data/shared/genetic_marker_dataset_bitwise_label'
-    print('convert known markers')
-    generate_bitwise_meta(csv_ds_path, bitwise_ds_path, known=True)
-    generate_bitwise_label(csv_ds_path, bitwise_ds_path, True, True, True)
-    generate_bitwise_label(csv_ds_path, bitwise_ds_path, True, True, False)
-    generate_bitwise_label(csv_ds_path, bitwise_ds_path, True, False, True)
-    generate_bitwise_label(csv_ds_path, bitwise_ds_path, True, False, False)
-    print('convert unknown markers')
-    generate_bitwise_meta(csv_ds_path, bitwise_ds_path, known=False)
-    generate_bitwise_label(csv_ds_path, bitwise_ds_path, False, True, True)
-    generate_bitwise_label(csv_ds_path, bitwise_ds_path, False, True, False)
-    generate_bitwise_label(csv_ds_path, bitwise_ds_path, False, False, True)
-    generate_bitwise_label(csv_ds_path, bitwise_ds_path, False, False, False)
+    # print('convert known markers')
+    # generate_bitwise_meta(csv_ds_path, bitwise_ds_path, known=True)
+    # generate_bitwise_label(csv_ds_path, bitwise_ds_path, True, True, True)
+    # generate_bitwise_label(csv_ds_path, bitwise_ds_path, True, True, False)
+    # generate_bitwise_label(csv_ds_path, bitwise_ds_path, True, False, True)
+    # generate_bitwise_label(csv_ds_path, bitwise_ds_path, True, False, False)
+    # print('convert unknown markers')
+    # generate_bitwise_meta(csv_ds_path, bitwise_ds_path, known=False)
+    # generate_bitwise_label(csv_ds_path, bitwise_ds_path, False, True, True)
+    # generate_bitwise_label(csv_ds_path, bitwise_ds_path, False, True, False)
+    # generate_bitwise_label(csv_ds_path, bitwise_ds_path, False, False, True)
+    # generate_bitwise_label(csv_ds_path, bitwise_ds_path, False, False, False)
     print('convert multimodal')
     generate_bitwise_multimodal_meta(csv_ds_path, bitwise_ds_path, known=True)
     generate_multimodal_bitwise_label(csv_ds_path, bitwise_ds_path, True, True)
