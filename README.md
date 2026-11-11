@@ -109,5 +109,24 @@ After you have downloaded the images and cloned this repository, follow these st
   1. Modify the dataset folder location in `tasks/s9_pretrain_rgb_jpg_res50_512_softmax_ebd.py` and `tasks/s9_pretrain_scnr3d_jpg_res50_512_softmax_ebd.py` to the location where you downloaded the imagery.
   2. Run `python -m tasks.s9_pretrain_rgb_jpg_res50_512_softmax_ebd` for RGB model finetuning and `python -m tasks.s9_pretrain_scnr3d_jpg_res50_512_softmax_ebd` for 3D scanner finetuning
 
-## Paper
-The paper that details the SGxP Benchmark, "SG×P : A Sorghum Genotype × Phenotype Prediction Dataset and Benchmark", is currently under review at NeurIPS 2023 and can be found at https://openreview.net/pdf?id=dOeBYjxSoq.
+
+## Citation
+
+If you use this dataset in your research, please cite our paper:
+
+<details>
+<summary>BibTeX Citation</summary>
+
+```bibtex
+@inproceedings{NEURIPS2023_39d02e8e,
+  author = {Zhang, Zeyu and Pless, Robert and Shakoor, Nadia and Carnahan, Austin and Stylianou, Abby},
+  booktitle = {Advances in Neural Information Processing Systems},
+  doi = {10.52202/075280-0785},
+  pages = {17867--17881},
+  title = {SGxP: A Sorghum Genotype x Phenotype Prediction Dataset and Benchmark},
+  volume = {36},
+  year = {2023}
+}
+```
+
+</details>
