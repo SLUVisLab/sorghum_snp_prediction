@@ -114,11 +114,9 @@ After you have downloaded the images and cloned this repository, follow these st
 
 If you use this dataset in your research, please cite our paper:
 
-<details>
-<summary>BibTeX Citation</summary>
 
 ```bibtex
-@inproceedings{NEURIPS2023_39d02e8e,
+@inproceedings{sgxp_neurips,
   author = {Zhang, Zeyu and Pless, Robert and Shakoor, Nadia and Carnahan, Austin and Stylianou, Abby},
   booktitle = {Advances in Neural Information Processing Systems},
   doi = {10.52202/075280-0785},
@@ -129,4 +127,3 @@ If you use this dataset in your research, please cite our paper:
 }
 ```
 
-</details>
